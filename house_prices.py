@@ -199,24 +199,31 @@ def encode_ordinal(df0, column_name: str, categories):
     return df
 
 
-values_qualities = ["Ex", "Gd", "TA", "Fa", "Po"]
-values_qualities_with_na = ["NA", "Ex", "Gd", "TA", "Fa", "Po"]
-values_fintype = ["NA", "Unf", "LwQ", "Rec", "BLQ", "ALQ", "GLQ"]
-values_garagefinish = ["NA", "Unf", "RFn", "Fin"]
-values_paveddrive = ["N", "P", "Y"]
+def encode_ordinal_columns(df0):
+    df1 = df0.copy()
+    values_qualities = ["Ex", "Gd", "TA", "Fa", "Po"]
+    values_qualities_with_na = ["NA", "Ex", "Gd", "TA", "Fa", "Po"]
+    values_fintype = ["NA", "Unf", "LwQ", "Rec", "BLQ", "ALQ", "GLQ"]
+    values_garagefinish = ["NA", "Unf", "RFn", "Fin"]
+    values_paveddrive = ["N", "P", "Y"]
 
-dfx = encode_ordinal(dfx, "ExterQual", values_qualities)
-dfx = encode_ordinal(dfx, "ExterCond", values_qualities)
-dfx = encode_ordinal(dfx, "BsmtQual", values_qualities_with_na)
-dfx = encode_ordinal(dfx, "BsmtCond", values_qualities_with_na)
-dfx = encode_ordinal(dfx, "BsmtFinType1", values_fintype)
-dfx = encode_ordinal(dfx, "BsmtFinType2", values_fintype)
-dfx = encode_ordinal(dfx, "HeatingQC", values_qualities)
-dfx = encode_ordinal(dfx, "KitchenQual", values_qualities)
-dfx = encode_ordinal(dfx, "GarageFinish", values_garagefinish)
-dfx = encode_ordinal(dfx, "GarageQual", values_qualities_with_na)
-dfx = encode_ordinal(dfx, "GarageCond", values_qualities_with_na)
-dfx = encode_ordinal(dfx, "PavedDrive", values_paveddrive)
+    df1 = encode_ordinal(df1, "ExterQual", values_qualities)
+    df1 = encode_ordinal(df1, "ExterCond", values_qualities)
+    df1 = encode_ordinal(df1, "BsmtQual", values_qualities_with_na)
+    df1 = encode_ordinal(df1, "BsmtCond", values_qualities_with_na)
+    df1 = encode_ordinal(df1, "BsmtFinType1", values_fintype)
+    df1 = encode_ordinal(df1, "BsmtFinType2", values_fintype)
+    df1 = encode_ordinal(df1, "HeatingQC", values_qualities)
+    df1 = encode_ordinal(df1, "KitchenQual", values_qualities)
+    df1 = encode_ordinal(df1, "GarageFinish", values_garagefinish)
+    df1 = encode_ordinal(df1, "GarageQual", values_qualities_with_na)
+    df1 = encode_ordinal(df1, "GarageCond", values_qualities_with_na)
+    df1 = encode_ordinal(df1, "PavedDrive", values_paveddrive)
+    return df1
+
+
+df = encode_ordinal_columns(df)
+df2 = encode_ordinal_columns(df2)
 
 
 # %%
@@ -226,8 +233,8 @@ dfx = encode_ordinal(dfx, "PavedDrive", values_paveddrive)
 # %%
 # split
 target = "SalePrice"
-x = dfx.drop(target, axis=1)
-y = dfx[target]
+x = df.drop(target, axis=1)
+y = df[target]
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3,
                                                     random_state=18)
