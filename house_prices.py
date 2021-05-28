@@ -76,8 +76,39 @@ df2 = df2.drop(columns_to_drop, axis=1)
 
 
 # %%
-df.info()
+dfcategorics = df.select_dtypes(include=['object'])
+print(dfcategorics.columns)
 
 
-# %%
+#%%
+# TODO: burayı elden gecir.
+dfi = df.select_dtypes(include=['int64'])
+# dff = df.select_dtypes(include=['float64'])
+
+ordinal_columns = """
+ExterQual
+ExterCond
+BsmtQual
+BsmtCond
+BsmtFinType1
+BsmtFinType2
+HeatingQC
+KitchenQual
+GarageFinish
+GarageQual
+GarageCond
+PavedDrive
+""".strip().split("\n")
+
+dfo = df[ordinal_columns]
+dfx = pd.concat([dfi, dfo], axis=1)
+
+dfx.info()
+
+
+# %% info
+# df.info()
+
+
+# %% last
 # last
