@@ -6,6 +6,9 @@ Kaggle House Pricing Dataset
 
 # %%
 # import
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
 import os
 import pandas as pd
 import numpy as np
@@ -80,7 +83,7 @@ dfcategorics = df.select_dtypes(include=['object'])
 print(dfcategorics.columns)
 
 
-#%%
+# %%
 # TODO: burayı elden gecir.
 dfi = df.select_dtypes(include=['int64'])
 # dff = df.select_dtypes(include=['float64'])
@@ -105,14 +108,14 @@ dfx = pd.concat([dfi, dfo], axis=1)
 
 dfx.info()
 
-#%% drop lines with na
+# %% drop lines with na
 # TODO: drop değil fillna uygula.
 # SATıRLARı HARCAMA!
 dfx = dfx.dropna(axis=0)
 
 
-#%% encone ordinal columns
-def encode_ordinal(df0, column_name:str, categories):
+# %% encone ordinal columns
+def encode_ordinal(df0, column_name: str, categories):
     """
     Label Encodes on a custom order.
 
@@ -143,6 +146,7 @@ def encode_ordinal(df0, column_name:str, categories):
     df[column_name] = df[column_name].map(mapping)
     return df
 
+
 values_qualities = ["Ex", "Gd", "TA", "Fa", "Po"]
 values_qualities_with_na = ["NA", "Ex", "Gd", "TA", "Fa", "Po"]
 values_fintype = ["NA", "Unf", "LwQ", "Rec", "BLQ", "ALQ", "GLQ"]
@@ -161,6 +165,34 @@ dfx = encode_ordinal(dfx, "GarageFinish", values_garagefinish)
 dfx = encode_ordinal(dfx, "GarageQual", values_qualities_with_na)
 dfx = encode_ordinal(dfx, "GarageCond", values_qualities_with_na)
 dfx = encode_ordinal(dfx, "PavedDrive", values_paveddrive)
+
+
+# %%
+# TODO: diğer categoric alanları da OneHotEncoder'a sok.
+
+
+# %%
+# split
+target = "SalePrice"
+x = dfx.drop(target, axis=1)
+y = dfx[target]
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3,
+                                                    random_state=18)
+
+
+# %%
+# ML
+
+models = [LinearRegression(), RandomForestRegressor(random_state=23),
+          GradientBoostingRegressor(n_estimators=500, random_state=23)]
+
+for model in models:
+    model.fit(x_train, y_train)
+    print("_" * 20)
+    print(str(model))
+    score = model.score(x_test, y_test)
+    print(score)
 
 
 # %% info
