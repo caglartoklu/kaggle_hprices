@@ -47,7 +47,7 @@ else:
 
 df = pd.read_csv(file_name_train)
 df2 = pd.read_csv(file_name_test)
-# ids = df2["PassengerId"]
+dfids = df2["Id"].to_frame()
 df0 = df.copy()
 
 
@@ -287,12 +287,27 @@ for model in models:
 # df.info()
 
 
+# %% scoring
+# TODO: scoring
+# r2score
+# mean aboslute error
+# RMSE
+# RMSLE:
+# https://www.kaggle.com/carlolepelaars/understanding-the-metric-rmsle
+
+
 # %%
 # extract output
-# predictions = model.predict(df2)
-# my_dict = {"Id": test_data.Id, "SalePrice": predictions}
-# output = pd.DataFrame(my_dict)
-# output.to_csv('sample_submission.csv', index=False)
+
+# TODO: en iyi modeli kullan.
+model = GradientBoostingRegressor(n_estimators=500, random_state=23)
+model.fit(x_train, y_train)
+
+predictions = model.predict(df2)
+
+my_dict = {"Id": dfids["Id"], "SalePrice": predictions}
+dfout = pd.DataFrame(my_dict)
+dfout.to_csv(file_name_output, index=False)
 
 
 # %% last
