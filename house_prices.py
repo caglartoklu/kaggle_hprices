@@ -84,12 +84,19 @@ dfcategorics = df.select_dtypes(include=['object'])
 print(dfcategorics.columns)
 
 
+# TODO: fillna
+
+
 # %%
 def build_df(df1):
     df = df1.copy()
     dfi = df.select_dtypes(include=['int64'])
-    # dff = df.select_dtypes(include=['float64'])
+    dff = df.select_dtypes(include=['float64'])
     # TODO: ordinal olmayan kategorik kolonları da hallet.
+
+    # önce int64 sonra float64 kolonları secmek,
+    # kolonlardaki na durumuna göre, farklı kolon siralari ortaya çıkabilir.
+    # bunu halledelim.
 
     ordinal_columns = """
 ExterQual
@@ -107,7 +114,7 @@ PavedDrive
     """.strip().split("\n")
 
     dfo = df[ordinal_columns]
-    dfx = pd.concat([dfi, dfo], axis=1)
+    dfx = pd.concat([dfi, dfo, dff], axis=1)
     return dfx
 
 
