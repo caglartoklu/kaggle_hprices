@@ -144,21 +144,22 @@ def encode_ordinal(df0, column_name:str, categories):
     return df
 
 values_qualities = ["Ex", "Gd", "TA", "Fa", "Po"]
+values_qualities_with_na = ["NA", "Ex", "Gd", "TA", "Fa", "Po"]
 values_fintype = ["NA", "Unf", "LwQ", "Rec", "BLQ", "ALQ", "GLQ"]
 values_garagefinish = ["NA", "Unf", "RFn", "Fin"]
 values_paveddrive = ["N", "P", "Y"]
 
 dfx = encode_ordinal(dfx, "ExterQual", values_qualities)
 dfx = encode_ordinal(dfx, "ExterCond", values_qualities)
-dfx = encode_ordinal(dfx, "BsmtQual", ["NA"] + values_qualities)
-dfx = encode_ordinal(dfx, "BsmtCond", ["NA"] + values_qualities)
-dfx = encode_ordinal(dfx, "BsmtFinType1", ["NA"] + values_fintype)
-dfx = encode_ordinal(dfx, "BsmtFinType2", ["NA"] + values_fintype)
+dfx = encode_ordinal(dfx, "BsmtQual", values_qualities_with_na)
+dfx = encode_ordinal(dfx, "BsmtCond", values_qualities_with_na)
+dfx = encode_ordinal(dfx, "BsmtFinType1", values_fintype)
+dfx = encode_ordinal(dfx, "BsmtFinType2", values_fintype)
 dfx = encode_ordinal(dfx, "HeatingQC", values_qualities)
 dfx = encode_ordinal(dfx, "KitchenQual", values_qualities)
 dfx = encode_ordinal(dfx, "GarageFinish", values_garagefinish)
-dfx = encode_ordinal(dfx, "GarageQual", ["NA"] + values_qualities)
-dfx = encode_ordinal(dfx, "GarageCond", ["NA"] + values_qualities)
+dfx = encode_ordinal(dfx, "GarageQual", values_qualities_with_na)
+dfx = encode_ordinal(dfx, "GarageCond", values_qualities_with_na)
 dfx = encode_ordinal(dfx, "PavedDrive", values_paveddrive)
 
 
