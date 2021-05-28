@@ -105,6 +105,62 @@ dfx = pd.concat([dfi, dfo], axis=1)
 
 dfx.info()
 
+#%% drop lines with na
+# TODO: drop değil fillna uygula.
+# SATıRLARı HARCAMA!
+dfx = dfx.dropna(axis=0)
+
+
+#%% encone ordinal columns
+def encode_ordinal(df0, column_name:str, categories):
+    """
+    Label Encodes on a custom order.
+
+    df0: DataFrame
+    column_name: str
+    categories: List of strings
+
+    Can bu used for ordinal mapping.
+    It works on a copy of DataFrame df0.
+    It overwrites the column in this copy.
+
+    requires:
+        from sklearn.preprocessing import LabelEncoder
+    categories: ["red", "green", "blue"]
+                  0      1        2
+
+    example:
+        df["ExterQual2"] = df["ExterQual"]
+        df2 = encode_ordinal(df, "ExterQual2", ["Ex", "Gd", "TA", "Fa", "Po"])
+
+    returns a modified copy of the original DataFrame.
+    """
+    df = df0.copy()
+    mapping = {}
+    for i, category in enumerate(categories):
+        mapping[category] = i
+
+    df[column_name] = df[column_name].map(mapping)
+    return df
+
+values_qualities = ["Ex", "Gd", "TA", "Fa", "Po"]
+values_fintype = ["NA", "Unf", "LwQ", "Rec", "BLQ", "ALQ", "GLQ"]
+values_garagefinish = ["NA", "Unf", "RFn", "Fin"]
+values_paveddrive = ["N", "P", "Y"]
+
+dfx = encode_ordinal(dfx, "ExterQual", values_qualities)
+dfx = encode_ordinal(dfx, "ExterCond", values_qualities)
+dfx = encode_ordinal(dfx, "BsmtQual", ["NA"] + values_qualities)
+dfx = encode_ordinal(dfx, "BsmtCond", ["NA"] + values_qualities)
+dfx = encode_ordinal(dfx, "BsmtFinType1", ["NA"] + values_fintype)
+dfx = encode_ordinal(dfx, "BsmtFinType2", ["NA"] + values_fintype)
+dfx = encode_ordinal(dfx, "HeatingQC", values_qualities)
+dfx = encode_ordinal(dfx, "KitchenQual", values_qualities)
+dfx = encode_ordinal(dfx, "GarageFinish", values_garagefinish)
+dfx = encode_ordinal(dfx, "GarageQual", ["NA"] + values_qualities)
+dfx = encode_ordinal(dfx, "GarageCond", ["NA"] + values_qualities)
+dfx = encode_ordinal(dfx, "PavedDrive", values_paveddrive)
+
 
 # %% info
 # df.info()
