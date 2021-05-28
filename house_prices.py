@@ -88,41 +88,6 @@ print(dfcategorics.columns)
 
 
 # %%
-def build_df(df1):
-    df = df1.copy()
-    dfi = df.select_dtypes(include=['int64'])
-    dff = df.select_dtypes(include=['float64'])
-    # TODO: ordinal olmayan kategorik kolonları da hallet.
-
-    # önce int64 sonra float64 kolonları secmek,
-    # kolonlardaki na durumuna göre, farklı kolon siralari ortaya çıkabilir.
-    # bunu halledelim.
-
-    ordinal_columns = """
-ExterQual
-ExterCond
-BsmtQual
-BsmtCond
-BsmtFinType1
-BsmtFinType2
-HeatingQC
-KitchenQual
-GarageFinish
-GarageQual
-GarageCond
-PavedDrive
-    """.strip().split("\n")
-
-    dfo = df[ordinal_columns]
-    dfx = pd.concat([dfi, dfo, dff], axis=1)
-    return dfx
-
-
-df = build_df(df)
-df2 = build_df(df2)
-
-
-# %%
 dfnulls = df2.isnull().sum()
 dfnulls
 
@@ -168,9 +133,54 @@ def fillna(df1):
     df1["GarageQual"] = df1["GarageQual"].fillna("TA")
     df1["GarageCond"] = df1["GarageCond"].fillna("TA")
 
+    # TODO: mean ile doldurduk, daha düzgün dolduralim:
+    df1["LotFrontage"] = df1["LotFrontage"].fillna(df1["LotFrontage"].mean())
+    df1["MasVnrArea"] = df1["MasVnrArea"].fillna(df1["MasVnrArea"].mean())
+    df1["GarageYrBlt"] = df1["GarageYrBlt"].fillna(df1["GarageYrBlt"].mean())
+
 
 fillna(df)
 fillna(df2)
+
+
+# %%
+def build_df(df1):
+    df = df1.copy()
+    dfi = df.select_dtypes(include=['int64'])
+    dff = df.select_dtypes(include=['float64'])
+    # TODO: ordinal olmayan kategorik kolonları da hallet.
+
+    # önce int64 sonra float64 kolonları secmek,
+    # kolonlardaki na durumuna göre, farklı kolon siralari ortaya çıkabilir.
+    # bunu halledelim.
+
+    ordinal_columns = """
+ExterQual
+ExterCond
+BsmtQual
+BsmtCond
+BsmtFinType1
+BsmtFinType2
+HeatingQC
+KitchenQual
+GarageFinish
+GarageQual
+GarageCond
+PavedDrive
+    """.strip().split("\n")
+
+    dfo = df[ordinal_columns]
+    dfx = pd.concat([dfi, dfo, dff], axis=1)
+    return dfx
+
+
+df = build_df(df)
+df2 = build_df(df2)
+
+
+# %%
+dfnulls1 = pd.isnull(df).sum()
+dfnulls2 = pd.isnull(df2).sum()
 
 
 # %% encone ordinal columns
