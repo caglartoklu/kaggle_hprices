@@ -6,6 +6,7 @@ Kaggle House Pricing Dataset
 
 # %%
 # import
+from pandas.core.algorithms import value_counts
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
@@ -84,11 +85,13 @@ print(dfcategorics.columns)
 
 
 # %%
-# TODO: burayı elden gecir.
-dfi = df.select_dtypes(include=['int64'])
-# dff = df.select_dtypes(include=['float64'])
+def build_df(df1):
+    df = df1.copy()
+    dfi = df.select_dtypes(include=['int64'])
+    # dff = df.select_dtypes(include=['float64'])
+    # TODO: ordinal olmayan kategorik kolonları da hallet.
 
-ordinal_columns = """
+    ordinal_columns = """
 ExterQual
 ExterCond
 BsmtQual
@@ -101,17 +104,66 @@ GarageFinish
 GarageQual
 GarageCond
 PavedDrive
-""".strip().split("\n")
+    """.strip().split("\n")
 
-dfo = df[ordinal_columns]
-dfx = pd.concat([dfi, dfo], axis=1)
+    dfo = df[ordinal_columns]
+    dfx = pd.concat([dfi, dfo], axis=1)
+    return dfx
 
-dfx.info()
 
-# %% drop lines with na
-# TODO: drop değil fillna uygula.
-# SATıRLARı HARCAMA!
-dfx = dfx.dropna(axis=0)
+df = build_df(df)
+df2 = build_df(df2)
+
+
+# %%
+dfnulls = df2.isnull().sum()
+dfnulls
+
+
+# %% value_counts
+def display_value_counts(df1):
+    column_names = """
+    BsmtQual         44
+    BsmtCond         45
+    BsmtFinType1     42
+    BsmtFinType2     42
+    KitchenQual       1
+    GarageFinish     78
+    GarageQual       78
+    GarageCond       78
+    """.strip()
+
+    for line in column_names.splitlines():
+        column_name = line.split()[0]
+        print()
+        print(column_name)
+        value_counts = df1[column_name].value_counts()
+        print(value_counts)
+
+# display_value_counts(df)
+# display_value_counts(df2)
+
+
+# %% fillna
+# fillna
+def fillna(df1):
+    """
+    Dışarıdan gelen DataFrame'i degistirir.
+    Bu sebeple ayrı copy() işlerine girmedik.
+    """
+    # TODO: değerleri korelasyona bakarak doldur.
+    df1["BsmtQual"] = df1["BsmtQual"].fillna("TA")
+    df1["BsmtCond"] = df1["BsmtCond"].fillna("TA")
+    df1["BsmtFinType1"] = df1["BsmtFinType1"].fillna("GLQ")
+    df1["BsmtFinType2"] = df1["BsmtFinType2"].fillna("Unf")
+    df1["KitchenQual"] = df1["KitchenQual"].fillna("TA")
+    df1["GarageFinish"] = df1["GarageFinish"].fillna("Unf")
+    df1["GarageQual"] = df1["GarageQual"].fillna("TA")
+    df1["GarageCond"] = df1["GarageCond"].fillna("TA")
+
+
+fillna(df)
+fillna(df2)
 
 
 # %% encone ordinal columns
@@ -197,6 +249,14 @@ for model in models:
 
 # %% info
 # df.info()
+
+
+# %%
+# extract output
+# predictions = model.predict(df2)
+# my_dict = {"Id": test_data.Id, "SalePrice": predictions}
+# output = pd.DataFrame(my_dict)
+# output.to_csv('sample_submission.csv', index=False)
 
 
 # %% last
