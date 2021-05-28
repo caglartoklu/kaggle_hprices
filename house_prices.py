@@ -48,9 +48,35 @@ df0 = df.copy()
 
 
 # %%
-columns = "MSSubClass,MSZoning,LotFrontage,LotArea".split(",")
-dftrain = df0[columns]
-dftest = df2[columns]
+# columns = "MSSubClass,MSZoning,LotFrontage,LotArea".split(",")
+# dftrain = df0[columns]
+# dftest = df2[columns]
+
+# %%
+# desc
+dfdesc = df.describe().T
+dfdesc
+
+
+# %%
+df.info()
+
+
+# %%
+# columns to drop
+columns_to_drop = ["Id", "Alley", "FireplaceQu",
+                   "PoolQC", "Fence", "MiscFeature"]
+# Alley: 91 non-null
+# FireplaceQu: 770
+# PoolQC: 7
+# Fence: 281
+# MiscFeature: 54
+df = df.drop(columns_to_drop, axis=1)
+df2 = df2.drop(columns_to_drop, axis=1)
+
+
+# %%
+df.info()
 
 
 # %%
