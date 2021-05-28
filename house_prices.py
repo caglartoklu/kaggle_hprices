@@ -134,9 +134,21 @@ def fillna(df1):
     df1["GarageCond"] = df1["GarageCond"].fillna("TA")
 
     # TODO: mean ile doldurduk, daha düzgün dolduralim:
+    # TODO: mean yapiyorsan, bari int olanları int bırak:
     df1["LotFrontage"] = df1["LotFrontage"].fillna(df1["LotFrontage"].mean())
     df1["MasVnrArea"] = df1["MasVnrArea"].fillna(df1["MasVnrArea"].mean())
     df1["GarageYrBlt"] = df1["GarageYrBlt"].fillna(df1["GarageYrBlt"].mean())
+
+    df1["BsmtFinSF1"] = df1["BsmtFinSF1"].fillna(df1["BsmtFinSF1"].mean())
+    df1["BsmtFinSF2"] = df1["BsmtFinSF2"].fillna(df1["BsmtFinSF2"].mean())
+    df1["BsmtUnfSF"] = df1["BsmtUnfSF"].fillna(df1["BsmtUnfSF"].mean())
+    df1["TotalBsmtSF"] = df1["TotalBsmtSF"].fillna(df1["TotalBsmtSF"].mean())
+    df1["BsmtFullBath"] = df1["BsmtFullBath"].fillna(
+        df1["BsmtFullBath"].mean())
+    df1["BsmtHalfBath"] = df1["BsmtHalfBath"].fillna(
+        df1["BsmtHalfBath"].mean())
+    df1["GarageCars"] = df1["GarageCars"].fillna(df1["GarageCars"].mean())
+    df1["GarageArea"] = df1["GarageArea"].fillna(df1["GarageArea"].mean())
 
 
 fillna(df)
@@ -176,11 +188,6 @@ PavedDrive
 
 df = build_df(df)
 df2 = build_df(df2)
-
-
-# %%
-dfnulls1 = pd.isnull(df).sum()
-dfnulls2 = pd.isnull(df2).sum()
 
 
 # %% encone ordinal columns
@@ -241,6 +248,11 @@ def encode_ordinal_columns(df0):
 
 df = encode_ordinal_columns(df)
 df2 = encode_ordinal_columns(df2)
+
+
+# %%
+dfnulls1 = pd.isnull(df).sum()
+dfnulls2 = pd.isnull(df2).sum()
 
 
 # %%
